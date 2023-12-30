@@ -1,3 +1,13 @@
+document.addEventListener('DOMContentLoaded', fetchData);
+
+function fetchData() {
+    const apiUrl = 'https://my.api.mockaroo.com/cars.json?key=26099330'; 
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => populateTable(data))
+        .catch(error => console.error('Error fetching data:', error));
+}
 
 function populateTable(data) {
     const tableBody = document.querySelector('#data-table tbody');
