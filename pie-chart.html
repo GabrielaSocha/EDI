@@ -4,17 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Makes Pie Chart</title>
+
+  <!--chart will be rendered in "canvas" element,
+    included chart.js library-->
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <canvas id="carMakesChart" width="400" height="400"></canvas>
 
   <script>
-    // Fetch data from the API
+    //fetch data from api in json format
     fetch('https://my.api.mockaroo.com/cars.json?key=26099330')
       .then(response => response.json())
       .then(data => {
-        // Process the data to get counts for each car make
+        //count each car make and store it in carMakesCount
         const carMakesCount = {};
 
         data.forEach(entry => {
@@ -22,11 +26,11 @@
           carMakesCount[make] = (carMakesCount[make] || 0) + 1;
         });
 
-        // Extract labels and data for the pie chart
+        //extract elements: labels(car makes) and data values(counts) to create a chart
         const labels = Object.keys(carMakesCount);
         const dataValues = Object.values(carMakesCount);
 
-        // Create a pie chart
+        //pie chart on element <canvas>
         const ctx = document.getElementById('carMakesChart').getContext('2d');
         const carMakesChart = new Chart(ctx, {
           type: 'pie',
@@ -39,7 +43,7 @@
           },
         });
 
-        // Function to generate random colors
+        //generate random colors
         function getRandomColors(count) {
           const colors = [];
           for (let i = 0; i < count; i++) {
@@ -49,6 +53,7 @@
           return colors;
         }
       })
+      //in case the api data cant be fetched
       .catch(error => console.error('Error fetching data:', error));
   </script>
 </body>
