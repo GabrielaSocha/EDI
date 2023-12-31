@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Production Years Bar Chart</title>
+
+  <!--chart will be rendered in "canvas" element,
+    included chart.js library-->
+    
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <canvas id="carYearsChart" width="800" height="400"></canvas>
+
+  <script>
+    //fetch data from api in json format
+    fetch('https://my.api.mockaroo.com/cars.json?key=26099330')
+      .then(response => response.json())
+      .then(data => {
+        //get counts for each production year and store in productionYearsCount
+        const productionYearsCount = {};
+
+        data.forEach(entry => {
+          const year = entry.year;
+          productionYearsCount[year] = (productionYearsCount[year] || 0) + 1;
+        });
+
+        //extract elements: labels(production year) and data values(counts) to create a chart
+        const labels = Object.keys(productionYearsCount);
+        const dataValues = Object.values(productionYearsCount);
+
+        // bar chart on element <canvas>
+        const ctx = document.getElementById('carYearsChart').getContext('2d');
+        const carYearsChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Number of cars',
+              data: dataValues,
+              backgroundColor: '#9966FF', //bar color
+              borderColor: '#6633CC', //border color
+              borderWidth: 4, // border width
+            }],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Number of cars',
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Production year',
+                },
+              },
+            },
+          },
+        });
+      })
+    // if api issues:
+      .catch(error => console.error('Error fetching data:', error));
+  </script>
+</body>
+</html>
+
