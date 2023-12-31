@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Makes Pie Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <canvas id="carMakesChart" width="400" height="400"></canvas>
+
+  <script>
+    // Fetch data from the API
+    fetch('https://my.api.mockaroo.com/cars.json?key=26099330')
+      .then(response => response.json())
+      .then(data => {
+        // Process the data to get counts for each car make
+        const carMakesCount = {};
+
+        data.forEach(entry => {
+          const make = entry.make;
+          carMakesCount[make] = (carMakesCount[make] || 0) + 1;
+        });
+
+        // Extract labels and data for the pie chart
+        const labels = Object.keys(carMakesCount);
+        const dataValues = Object.values(carMakesCount);
+
+        // Create a pie chart
+        const ctx = document.getElementById('carMakesChart').getContext('2d');
+        const carMakesChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: dataValues,
+              backgroundColor: getRandomColors(dataValues.length),
+            }],
+          },
+        });
+
+        // Function to generate random colors
+        function getRandomColors(count) {
+          const colors = [];
+          for (let i = 0; i < count; i++) {
+            const color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`;
+            colors.push(color);
+          }
+          return colors;
+        }
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  </script>
+</body>
+</html>
+
