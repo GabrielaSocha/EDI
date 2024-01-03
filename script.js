@@ -32,3 +32,20 @@ function populateTable(data) {
 
     });
 }
+
+function displayCharts(){
+    var screenWidth = window.innerWidth;
+    var chart1 = document.getElementById("carYearsChart");
+    var chart2 = document.getElementById("carMakesChart");
+    if (screenWidth >= 600 ) {
+        chart1.style.display = "inline-block";
+        chart2.style.display = "inline-block";
+    } else {
+        centerChart(chart1);
+        centerChart(chart2);        
+    }
+}
+function centerChart(chart) {
+    chart.style.display = "block";
+    chart.style.margin = "0 auto";
+}

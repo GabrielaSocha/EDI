@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <title>Electronic Data Interchange Project</title>
 </head>
 
@@ -85,6 +88,148 @@
             </table>
         </div>
     </section>
+
+
+<div id="chart-container">
+<canvas id="carYearsChart"></canvas>
+    <script>
+      //fetch data from api in json format
+      fetch('https://my.api.mockaroo.com/cars.json?key=26099330')
+        .then(response => response.json())
+        .then(data => {
+          //get counts for each production year and store in productionYearsCount
+          const productionYearsCount = {};
+  
+          data.forEach(entry => {
+            const year = entry.year;
+            productionYearsCount[year] = (productionYearsCount[year] || 0) + 1;
+          });
+  
+          //extract elements: labels(production year) and data values(counts) to create a chart
+          const labels = Object.keys(productionYearsCount);
+          const dataValues = Object.values(productionYearsCount);
+  
+          // bar chart on element <canvas>
+          const ctx = document.getElementById('carYearsChart').getContext('2d');
+          const carYearsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Number of cars',
+                data: dataValues,
+                backgroundColor: '#9966FF', //bar color
+                borderColor: '#6633CC', //border color
+                borderWidth: 2, // border width
+              }],
+            },
+            options: {
+              plugins:{
+                legend:{
+                  labels, title: {
+                    color: 'white'
+                  }
+                }
+              },
+
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    color: 'white'
+                  },
+                  title: {
+                    display: true,
+                    text: 'Number of cars', color: 'white'
+                  },
+                },
+                x: {
+                  ticks: {
+                    color: 'white'
+                  },
+                  title: {
+                    display: true,
+                    text: 'Production year', color: 'white'
+                  },
+                },
+              },
+              responsive: false,
+              maintainAspectRatio: true
+            },
+          });
+        })
+
+      // if api issues:
+        .catch(error => console.error('Error fetching data:', error));
+    </script>
+</div>
+<br>
+
+
+</br>
+<div id="chart-container">
+<canvas id="carMakesChart"></canvas>
+
+  <script>
+    //fetch data from api in json format
+    fetch('https://my.api.mockaroo.com/cars.json?key=26099330')
+      .then(response => response.json())
+      .then(data => {
+        //count each car make and store it in carMakesCount
+        const carMakesCount = {};
+
+        data.forEach(entry => {
+          const make = entry.make;
+          carMakesCount[make] = (carMakesCount[make] || 0) + 1;
+        });
+
+        //extract elements: labels(car makes) and data values(counts) to create a chart
+        const labels = Object.keys(carMakesCount);
+        const dataValues = Object.values(carMakesCount);
+
+        const options = {
+          plugins:{
+            legend:{
+              labels: {
+                color: 'white'
+              }
+            }
+          },
+          responsive: false,
+          maintainAspectRatio: true
+        };
+        //pie chart on element <canvas>
+        const ctx = document.getElementById('carMakesChart').getContext('2d');
+
+        const carMakesChart = new Chart(ctx, {
+          scaleFontColor: "white",
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: dataValues,
+              backgroundColor: getRandomColors(dataValues.length),
+              borderColor: '#D3D3D3'
+            }],
+          },
+          options: options
+        });
+
+        //generate random colors
+        function getRandomColors(count) {
+          const colors = [];
+          for (let i = 0; i < count; i++) {
+            const color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`;
+            colors.push(color);
+          }
+          return colors;
+        }
+      })
+      //in case the api data cant be fetched
+      .catch(error => console.error('Error fetching data:', error));
+  </script>
+</div>
+
     <footer>
         <p>&copy; 2023 Electronic Data Interchange Project</p>
     </footer>
