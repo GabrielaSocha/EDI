@@ -73,8 +73,7 @@ fetch('https://my.api.mockaroo.com/cars.json?key=26099330')
           label: 'Number of cars',
           data: dataValues,
           backgroundColor: '#9966FF', 
-          borderColor: '#6633CC', 
-          borderWidth: 2, 
+          borderWidth: 0, 
         }],
       },
       options: {
@@ -151,7 +150,7 @@ fetch('https://my.api.mockaroo.com/cars.json?key=26099330')
           datasets: [{
             data: dataValues,
             backgroundColor: getRandomColors(dataValues.length),
-            borderColor: '#D3D3D3'
+            borderWidth: 0,
           }],
         },
         options: options
